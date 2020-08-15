@@ -2,13 +2,16 @@ declare module 'package.js' {
 
     interface PackageJson {
         name: string;
-        [x: string]: any
     }
 
     export interface Plugin {
         dir: string;
         meta: PackageJson;
         instance: any
+    }
+
+    export interface TypedPlugin<TMetaType> extends Plugin {
+        meta: PackageJson & TMetaType
     }
 
     interface AutoloadConfig {
@@ -21,12 +24,12 @@ declare module 'package.js' {
 
     }
 
-    export default class PackageController {
+    export default class PackageController<TPluginType extends Plugin> {
 
-        loadedPlugins: Plugin[];
+        loadedPlugins: TPluginType[];
 
         isLoaded(packageName: string): boolean;
-        autoload: (config: AutoloadConfig) => Plugin[]
+        autoload: (config: AutoloadConfig) => TPluginType[]
 
     }
 
